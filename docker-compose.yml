@@ -1,0 +1,36 @@
+version: "3.8"
+
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql_db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpass
+      MYSQL_DATABASE: appdb
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 8
+      start_period: 30s
+
+  flask:
+    build: .
+    container_name: flask_app
+    restart: unless-stopped
+    ports:
+      - "5000:5000"
+    environment:
+      DB_HOST: mysql
+      DB_USER: root
+      DB_PASS: rootpass
+      DB_NAME: appdb
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+volumes:
+  mysql_data:
