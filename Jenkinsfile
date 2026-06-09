@@ -1,10 +1,6 @@
 pipeline {
     agent any
 
-    environment {
-        COMPOSE_FILE = "docker-compose.yml"
-    }
-
     stages {
 
         stage('Clone') {
@@ -36,7 +32,7 @@ pipeline {
             steps {
                 echo 'Running integration tests...'
                 sh 'pip3 install -q pytest requests'
-                sh 'pytest tests/ -v --tb=short'
+                sh 'python3 -m pytest tests/ -v --tb=short'
             }
         }
 
@@ -48,7 +44,7 @@ pipeline {
             echo 'App is live at http://localhost:5000'
         }
         failure {
-            echo '=== BUILD FAILED — stopping containers ==='
+            echo '=== BUILD FAILED ==='
             sh 'docker compose down || true'
         }
         always {
@@ -56,3 +52,4 @@ pipeline {
         }
     }
 }
+
