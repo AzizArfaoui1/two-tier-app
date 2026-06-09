@@ -20,8 +20,9 @@ pipeline {
 
         stage('Deploy') {
             steps {
-                echo 'Starting containers...'
-                sh 'docker compose down --remove-orphans || true'
+                echo 'Stopping any existing containers...'
+                sh 'docker stop mysql_db flask_app || true'
+                sh 'docker rm mysql_db flask_app || true'
                 sh 'docker compose up -d'
                 echo 'Waiting for MySQL to be ready...'
                 sh 'sleep 40'
@@ -45,11 +46,11 @@ pipeline {
         }
         failure {
             echo '=== BUILD FAILED ==='
-            sh 'docker compose down || true'
+            sh 'docker stop mysql_db flask_app || true'
+            sh 'docker rm mysql_db flask_app || true'
         }
         always {
             echo 'Pipeline finished.'
         }
     }
 }
-
