@@ -11,7 +11,7 @@ pipeline {
             steps {
                 echo 'Cloning repository...'
                 git branch: 'main',
-                    url: 'https://github.com/YOUR_USERNAME/two-tier-app.git'
+                    url: 'https://github.com/AzizArfaoui1/two-tier-app.git'
             }
         }
 
