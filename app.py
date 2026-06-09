@@ -15,7 +15,8 @@ def get_db():
 def index():
     return jsonify({
         "status": "ok",
-        "message": "Hello from Flask + MySQL on VirtualBox!"
+        "message": "Hello from Flask + MySQL on VMware!"
+
     })
 
 @app.route("/health")
